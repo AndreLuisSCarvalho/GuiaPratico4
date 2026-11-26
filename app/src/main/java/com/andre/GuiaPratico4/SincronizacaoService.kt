@@ -22,8 +22,6 @@ class SincronizacaoService : Service() {
         const val CHANNEL_ID = "canal_sincronizacao_ativa"
         const val NOTIFICATION_ID = 1001
     }
-
-    // Escopo dedicado de Corrotinas em thread de I/O (nunca bloqueia a Main Thread)
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     override fun onCreate() {
@@ -32,7 +30,7 @@ class SincronizacaoService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // 1. Constrói a notificação obrigatória para Serviços em Primeiro Plano
+
         val notificacao = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("Sincronização de Alta Performance")
             .setContentText("Coletando telemetria em segundo plano...")
@@ -40,10 +38,8 @@ class SincronizacaoService : Service() {
             .setOngoing(true) // Impede que o usuário deslize e apague enquanto ativo
             .build()
 
-        // 2. Promove o serviço para Foreground nos primeiros 5 segundos (obrigatório no Android)
         startForeground(NOTIFICATION_ID, notificacao)
 
-        // 3. Inicia o trabalho assíncrono em background
         serviceScope.launch {
             var ciclo = 1
             while (isActive) {

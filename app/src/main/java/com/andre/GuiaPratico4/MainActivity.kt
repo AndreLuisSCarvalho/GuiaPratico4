@@ -21,7 +21,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // ACIONAMENTO NA MainActivity.kt (dentro dos listeners dos botões)
         val intentServico = Intent(this, SincronizacaoService::class.java)
 
         setContent {
@@ -31,7 +30,7 @@ class MainActivity : ComponentActivity() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(onClick = {
-                    // ContextCompat escolhe automaticamente startForegroundService (Android 8+) ou startService
+
                     ContextCompat.startForegroundService(this@MainActivity, intentServico)
                 }) {
                     Text(text = "Iniciar Serviço")
